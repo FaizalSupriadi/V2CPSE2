@@ -50,12 +50,7 @@ int main( int argc, char *argv[] ){
 
 	std::array< drawable *, 1 > objects = { &pad1 };
 
-	action actions[] = {
-		action( sf::Keyboard::Left,  	[&](){ pad1.move( sf::Vector2f( -3.0,  0.0 )); }),
-		action( sf::Keyboard::Right, 	[&](){ pad1.move( sf::Vector2f( +3.0,  0.0 )); }),
-		action( sf::Keyboard::Up,    	[&](){ pad1.move( sf::Vector2f(  0.0, -3.0 )); }),
-		action( sf::Keyboard::Down,  	[&](){ pad1.move( sf::Vector2f(  0.0, +3.0 )); })
-	};
+	
 	
 	/*(50,60) CIRCLE blue 10
 (10,10) RECTANGLE red (30,40)
@@ -65,7 +60,7 @@ int main( int argc, char *argv[] ){
 
 	std::vector<drawable *> object;
 	std::ofstream output;
-	write(output, "(70,80) CIRCLE green 16");
+	write(output, "");
 	{
 		std::cout<<"reading\n";
 		std::ifstream input( "objects.txt" );
@@ -77,9 +72,17 @@ int main( int argc, char *argv[] ){
 			std::cout << problem.what();
 		}
 	}
+	action actions[] = {
+		action( sf::Keyboard::Left,  	[&](){ pad1.move( sf::Vector2f( -3.0,  0.0 )); }),
+		action( sf::Keyboard::Right, 	[&](){ pad1.move( sf::Vector2f( +3.0,  0.0 )); }),
+		action( sf::Keyboard::Up,    	[&](){ pad1.move( sf::Vector2f(  0.0, -3.0 )); }),
+		action( sf::Keyboard::Down,  	[&](){ pad1.move( sf::Vector2f(  0.0, +3.0 )); }),
+		action( sf::Mouse::Left, 		[&](){ for( auto & p : object ){ if( p->contains(window.mapPixelToCoords(sf::Mouse::getPosition( window )))){ if( !p->getHold()){ p->setHold(1);}}}}),
+		action( sf::Mouse::Right, 		[&](){ for( auto & p : object ){ if( p->getHold()){ std::cout<<"release\n"; p->setHold(0); }} }),
+		action( [&](){ for( auto & p : object ){ if( p->getHold()){ p->jump(sf::Mouse::getPosition( window ));}}}),
+																			
+	};
 	
-	
-
 	while (window.isOpen()) {
 		for( auto & action : actions ){
 			action();
@@ -93,30 +96,7 @@ int main( int argc, char *argv[] ){
 		
 		for( auto & p : object ){
         	p->draw( window );
-			if( p->getHold()){
-				p->jump(sf::Mouse::getPosition( window ));
-			}
-			if(sf::Mouse::isButtonPressed( sf::Mouse::Left )){
-				
-				sf::Vector2f pos = window.mapPixelToCoords(sf::Mouse::getPosition( window ));
-				std::cout<< pos.x << " : " << pos.y << "\n";
-				
-				if( p->getHold()){
-					std::cout<<"release\n";
-					p->setHold(0);
-				}
-				
-				if( p->contains(pos) ){
-					if(!p->getHold()){
-						p->setHold(1);
-					} 
-					
-					std::cout<<"jumping\n";
-					
-					p->jump( pos ); 
-					}
-				}
-      	}
+		}
 		
 
 		window.display();

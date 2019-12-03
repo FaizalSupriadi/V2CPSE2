@@ -1,5 +1,4 @@
 (50,60) CIRCLE blue 10
-(10,10) RECTANGLE red (30,40)
-(110, 50) PICTURE ball.jpg
-(70,80) CIRCLE green 16
-(70,80) CIRCLE green 16
+(10,10) RECTANGLE red (10, 10)
+(110, 50) PICTURE Slimeball.png
+
