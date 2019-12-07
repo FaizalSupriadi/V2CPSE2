@@ -1,12 +1,27 @@
 #include <SFML/Graphics.hpp>
 #include "ball.hpp"
-#include "hwlib.hpp"
-ball::ball( sf::Vector2f position, float size , sf::Color color, sf::Vector2f speed) :
+ball::ball( sf::Vector2f position, float size , sf::Color color, int identity, sf::Vector2f speed) :
 	position{ position },	
 	size{ size },
 	color{ color },
+	identity{ identity },
 	speed{ speed }
+	
 {  }
+
+void ball::setId( int id){
+	identity = id;
+}
+
+int ball::getId(){
+	return identity;
+}
+std::string ball::getPosition(){
+	int x = position.x;
+	int y = position.y;
+	
+	return "(" + std::to_string(x) + "," + std::to_string(y) + ")";
+}
  
 void ball::draw( sf::RenderWindow & window ){
 	circle.setFillColor( color );

@@ -12,10 +12,11 @@ private:
 	sf::Vector2f position;
 	sf::Vector2f size;
 	sf::Color color;
+	int identity;
 	
 public:
 
-	wall( sf::Vector2f position, sf::Vector2f size = sf::Vector2f{ 30.0, 50.0 }, sf::Color color = sf::Color::Green );
+	wall( sf::Vector2f position, sf::Vector2f size = sf::Vector2f{ 30.0, 50.0 }, sf::Color color = sf::Color::Green, int identity = -1 );
 
 	virtual void draw( sf::RenderWindow & window )override;
 	
@@ -28,6 +29,10 @@ public:
 	virtual bool intersect( const sf::FloatRect& other)const override;
 	virtual bool contains( const sf::Vector2f& other)const override;
 	sf::FloatRect getGlobalBounds()const;
+	
+	virtual void setId( int id)override;
+	virtual int getId()override;
+	virtual std::string getPosition()override;
 };
 
 template< typename T, int N >
@@ -53,10 +58,11 @@ class pad : public drawable {
 	sf::Vector2f position;
 	sf::Vector2f size;
 	sf::Color color;
+	int identity;
 	
 	
 public:
-	pad(  sf::Vector2f position, sf::Vector2f size = sf::Vector2f{ 20.0, 100.0 }, sf::Color color = sf::Color::Blue  );
+	pad(  sf::Vector2f position, sf::Vector2f size = sf::Vector2f{ 20.0, 100.0 }, sf::Color color = sf::Color::Blue, int identity=-1  );
 	virtual void draw( sf::RenderWindow & window ) override;
 	void move( sf::Vector2f delta );
 	
@@ -69,6 +75,10 @@ public:
 	virtual bool intersect( const sf::FloatRect& other)const override;
 	virtual bool contains( const sf::Vector2f& other)const override;
 	sf::FloatRect getGlobalBounds()const;
+	
+	virtual void setId( int id)override;
+	virtual int getId()override;
+	virtual std::string getPosition()override;
 
 };
 

@@ -3,10 +3,24 @@
 #include "image.hpp"
 #include "drawable.hpp"
 
-image::image( std::string picture, sf::Vector2f position ):
+image::image( std::string picture, sf::Vector2f position, int identity ):
 	picture{ picture },
-	position{ position }
+	position{ position },
+	identity{ identity }
 {}
+
+void image::setId( int id){
+	identity = id;
+}
+
+int image::getId(){
+	return identity;
+}
+std::string image::getPosition(){
+	int x = position.x;
+	int y = position.y;
+	return "(" + std::to_string(x) + "," + std::to_string(y) + ")";
+}
 
 void image::draw( sf::RenderWindow & window ) {
 	texture.loadFromFile(picture);

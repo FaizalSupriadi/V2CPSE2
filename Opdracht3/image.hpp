@@ -12,10 +12,11 @@ private:
 	sf::Vector2f position;
 	sf::Texture texture;
 	sf::Sprite sprite;
+	int identity;
 
 public:
 
-	image( std::string pic, sf::Vector2f position );
+	image( std::string pic, sf::Vector2f position, int identity = -1);
 	
 	virtual void jump( sf::Vector2f target ) override;
 	virtual void jump( sf::Vector2i target ) override;
@@ -25,6 +26,10 @@ public:
 	virtual bool intersect( const sf::FloatRect& other)const override;
 	virtual bool contains( const sf::Vector2f& other)const override;
 	virtual void draw( sf::RenderWindow & window ) override;
+	
+	virtual void setId( int id)override;
+	virtual int getId()override;
+	virtual std::string getPosition()override;
 };
 
 #endif

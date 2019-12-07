@@ -10,35 +10,56 @@
 #include "factory.hpp"
 
 drawable* read( std::ifstream & input){
-	sf::Vector2f position;
-	std::string name;
+	sf::Vector2f position,size;
 	sf::Color color;
-	sf::Vector2f size;
-	std::string sizef;
-	std::string pic;
+	std::string name,sizef, pic, id;
+
 	
-	input >> position >> name;
-	
+	input >> id >> position >> name;
+	std::cout<< id<<" : " << name <<"\n";
 	if( name == "CIRCLE" ){
 		input >> color >> sizef;
-	return new ball( position, std::stof(sizef), color);
+	return new ball( position, std::stof(sizef), color, std::stoi(id));
 	} else if( name == "RECTANGLE" ){
 		input >> color >> size;
-	return new wall( position, size, color );
+	return new wall( position, size, color, std::stoi(id) );
    	} else if( name == "PICTURE" ){
    		input >> pic;
-      	return new image( pic, position );
+      	return new image( pic, position, std::stoi(id) );
 	} else if( name == "" ){
       	throw end_of_file();
 	}
 
    throw unknown_shape( name );
 }
-
-void write( std::ofstream & output, std::string s ){
-	output.open("objects.txt", std::ios_base::app);
-	output << s << std::endl;
-	output.close();
+/*
+	Standard
+	0 (50,60) CIRCLE blue 10
+	1 (10,10) RECTANGLE red (10, 10)
+	2 (110, 50) PICTURE Slimeball.png*/
+void write(int id, std::string position ){
+	std::string identity,pos,name,c,d;
+	std::ifstream input("objects.txt");
+	std::ofstream tmp("tmp.txt");
+	while(true){
+		
+		input >> identity; 
+		if(input.eof()){break;}	
+		input >> pos >> name >> c;
+		
+		if(c.find(".png") == std::string::npos){ input >> d; }else{d = "";}
+		
+		std::cout <<identity << " : "<< id<<"\n";
+		
+		if( identity == std::to_string(id) ){
+			std::cout<<"verified\n";
+			tmp << identity << " " << position << " "<< name<< " " << c<< " " << d<< std::endl;
+		}else{	
+			tmp << identity << " " << pos << " "<< name<< " " << c<< " " << d<< std::endl;
+		}		
+	}
+	
+	std::rename("tmp.txt", "objects.txt");
 }
 
 int main( int argc, char *argv[] ){
@@ -50,17 +71,10 @@ int main( int argc, char *argv[] ){
 
 	std::array< drawable *, 1 > objects = { &pad1 };
 
-	
-	
-	/*(50,60) CIRCLE blue 10
-(10,10) RECTANGLE red (30,40)
-(110, 50) PICTURE ball.jpg*/
-
 
 
 	std::vector<drawable *> object;
-	std::ofstream output;
-	write(output, "");
+	
 	{
 		std::cout<<"reading\n";
 		std::ifstream input( "objects.txt" );
@@ -72,6 +86,7 @@ int main( int argc, char *argv[] ){
 			std::cout << problem.what();
 		}
 	}
+	
 	action actions[] = {
 		action( sf::Keyboard::Left,  	[&](){ pad1.move( sf::Vector2f( -3.0,  0.0 )); }),
 		action( sf::Keyboard::Right, 	[&](){ pad1.move( sf::Vector2f( +3.0,  0.0 )); }),
@@ -79,8 +94,7 @@ int main( int argc, char *argv[] ){
 		action( sf::Keyboard::Down,  	[&](){ pad1.move( sf::Vector2f(  0.0, +3.0 )); }),
 		action( sf::Mouse::Left, 		[&](){ for( auto & p : object ){ if( p->contains(window.mapPixelToCoords(sf::Mouse::getPosition( window )))){ if( !p->getHold()){ p->setHold(1);}}}}),
 		action( sf::Mouse::Right, 		[&](){ for( auto & p : object ){ if( p->getHold()){ std::cout<<"release\n"; p->setHold(0); }} }),
-		action( [&](){ for( auto & p : object ){ if( p->getHold()){ p->jump(sf::Mouse::getPosition( window ));}}}),
-																			
+		action( [&](){ for( auto & p : object ){ if( p->getHold()){ std::cout<<"jump\n";p->jump(sf::Mouse::getPosition( window )); write(p->getId(),p->getPosition());}}}),										
 	};
 	
 	while (window.isOpen()) {

@@ -12,7 +12,7 @@
 SOURCES := ball.cpp wall.cpp image.cpp
 
 # header files in this project
-HEADERS := ball.hpp wall.hpp action.hpp factory.hpp image.hpp
+HEADERS := drawable.hpp ball.hpp wall.hpp action.hpp factory.hpp image.hpp
 
 # other places to look for files for this project
 SEARCH  := 

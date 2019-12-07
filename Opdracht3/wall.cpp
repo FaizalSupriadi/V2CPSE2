@@ -1,11 +1,27 @@
 #include <SFML/Graphics.hpp>
 #include "wall.hpp"
+#include "drawable.hpp"
 
-wall::wall( sf::Vector2f position, sf::Vector2f size, sf::Color color ) :
+wall::wall( sf::Vector2f position, sf::Vector2f size, sf::Color color, int identity ) :
 	position{ position },
 	size{ size },
-	color{ color }
+	color{ color },
+	identity{ identity }
 {}
+
+void wall::setId( int id){
+	identity = id;
+}
+
+int wall::getId(){
+	return identity;
+}
+
+std::string wall::getPosition(){
+	int x = position.x;
+	int y = position.y;
+	return "(" + std::to_string(x) + "," + std::to_string(y) + ")";
+}
 
 void wall::draw( sf::RenderWindow & window ) {
 	rectangle.setFillColor( color );
@@ -50,11 +66,26 @@ void wall::jump( sf::Vector2i target ){
 	));
 }
 
-pad::pad( sf::Vector2f position, sf::Vector2f size, sf::Color color ) :
+pad::pad( sf::Vector2f position, sf::Vector2f size, sf::Color color, int identity ) :
 	position{ position },
 	size{ size },
-	color{ color }
+	color{ color },
+	identity{ identity }
 {}
+
+void pad::setId( int id){
+	identity = id;
+}
+
+int pad::getId(){
+	return identity;
+}
+
+std::string pad::getPosition(){
+	int x = position.x;
+	int y = position.y;
+	return "(" + std::to_string(x) + "," + std::to_string(y) + ")";
+}
 
 void pad::move( sf::Vector2f delta ){
 	position += delta;

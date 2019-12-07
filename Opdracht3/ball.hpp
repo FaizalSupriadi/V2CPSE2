@@ -11,11 +11,12 @@ private:
 	sf::Vector2f position;
 	float size;
 	sf::Color color;
+	int identity;
 	sf::Vector2f speed;
 
 public:
 	
-	ball( sf::Vector2f position,float size = 30.0, sf::Color color = sf::Color::Red,sf::Vector2f speed = sf::Vector2f(+4.0 , +2.0 ) );
+	ball( sf::Vector2f position,float size = 30.0, sf::Color color = sf::Color::Red, int identity = -1, sf::Vector2f speed = sf::Vector2f(+4.0 , +2.0 ) );
 
 	void draw( sf::RenderWindow & window )override;	
 
@@ -32,6 +33,10 @@ public:
 	
 	virtual bool intersect( const sf::FloatRect& other)const override;
 	virtual bool contains( const sf::Vector2f& other)const override;
+	
+	virtual void setId( int id)override;
+	virtual int getId()override;
+	virtual std::string getPosition()override;
 	
 	sf::FloatRect getBounds();
 	sf::Vector2f collision( const sf::FloatRect& other);
