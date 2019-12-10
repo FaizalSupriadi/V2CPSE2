@@ -1,3 +1,4 @@
-1 (50,60) CIRCLE blue 10
-2 (10,10) RECTANGLE red (10,10)
-3 (110,50) PICTURE Slimeball.png
+1 (299,109) CIRCLE blue 10
+2 (389,190) RECTANGLE red (10,10)
+3 (171,231) PICTURE Slimeball.png 
+4 (479,102) LINE yellow 45

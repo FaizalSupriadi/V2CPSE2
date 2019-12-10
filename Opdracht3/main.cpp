@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include "ball.hpp"
 #include "wall.hpp"
+#include "line.hpp"
 #include "image.hpp"
 #include "drawable.hpp"
 #include "action.hpp"
@@ -12,21 +13,26 @@
 drawable* read( std::ifstream & input){
 	sf::Vector2f position,size;
 	sf::Color color;
-	std::string name,sizef, pic, id;
+	int rotation;
+	int id;
+	std::string name,sizef, pic;
 
 	
 	input >> id >> position >> name;
 	std::cout<< id<<" : " << name <<"\n";
 	if( name == "CIRCLE" ){
 		input >> color >> sizef;
-	return new ball( position, std::stof(sizef), color, std::stoi(id));
+	return new ball( position, std::stof(sizef), color, id);
 	} else if( name == "RECTANGLE" ){
 		input >> color >> size;
-	return new wall( position, size, color, std::stoi(id) );
+	return new wall( position, size, color, id );
    	} else if( name == "PICTURE" ){
    		input >> pic;
-      	return new image( pic, position, std::stoi(id) );
-	} else if( name == "" ){
+    return new image( pic, position, id );
+	}else if( name == "LINE" ){
+		input >> color >> rotation;
+	return new line( position, rotation, color, id);
+	}else if( name == "" ){
       	throw end_of_file();
 	}
 
