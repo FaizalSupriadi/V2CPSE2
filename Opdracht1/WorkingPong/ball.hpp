@@ -14,7 +14,7 @@ private:
 
 public:
 	
-	ball( sf::Vector2f position, sf::Vector2f speed = sf::Vector2f(+4.0 , +2.0 ),float size = 30.0 );
+	ball( sf::Vector2f position, sf::Vector2f speed = sf::Vector2f(+0.0 , +0.0 ),float size = 30.0 );
 
 	void draw( sf::RenderWindow & window );
 	

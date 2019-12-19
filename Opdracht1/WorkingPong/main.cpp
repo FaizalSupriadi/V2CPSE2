@@ -25,13 +25,13 @@ int main( int argc, char *argv[] ){
 
 	action actions[] = {
 		
-		action( sf::Keyboard::Up,    [&](){ pad1.move( sf::Vector2f(  0.0, -8.0)); }),
-		action( sf::Keyboard::Down,  [&](){ pad1.move( sf::Vector2f(  0.0, +8.0 )); }),
+		action( sf::Keyboard::Up,    	[&](){ pad1.move( sf::Vector2f(  0.0, -8.0)); }),
+		action( sf::Keyboard::Down,  	[&](){ pad1.move( sf::Vector2f(  0.0, +8.0 )); }),
 		
-		action( sf::Keyboard::W,    [&](){ pad2.move( sf::Vector2f(  0.0, -8.0 )); }),
-		action( sf::Keyboard::S,  [&](){ pad2.move( sf::Vector2f(  0.0, +8.0 )); }),
+		action( sf::Keyboard::W,    	[&](){ pad2.move( sf::Vector2f(  0.0, -8.0 )); }),
+		action( sf::Keyboard::S,  		[&](){ pad2.move( sf::Vector2f(  0.0, +8.0 )); }),
 		
-		action( sf::Mouse::Left,     [&](){ pad1.jump( sf::Mouse::getPosition( window )); }),
+		action( sf::Mouse::Left,     	[&](){ pad1.jump( sf::Mouse::getPosition( window )); }),
 		action( [&](){ my_ball.update();}),
 		action( [&](){ return my_ball.intersect(pad1.getGlobalBounds());}, [&](){ my_ball.setSpeed(my_ball.collision(pad1.getGlobalBounds())); }),
 		action( [&](){ return my_ball.intersect(pad2.getGlobalBounds());}, [&](){ my_ball.setSpeed(my_ball.collision(pad2.getGlobalBounds())); }),

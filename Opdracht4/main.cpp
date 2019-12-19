@@ -3,6 +3,8 @@
 #include <fstream>
 #include <algorithm>
 #include <iterator>
+#include <map>
+#include <unordered_set>
 
 
 int main(){
@@ -44,5 +46,29 @@ int main(){
 	for(auto c : alpha){
 		std::cout << c.second << " : " << c.first <<"\n";
 	}
+	
+	std::vector<std::string> words;                                     //holds all the words that are in the tekst after changing uppercase to lower and digit to alpha
+  	std::vector<std::pair<int, std::string>> bufferVec;                 //a vector that is meant to sort what will be put in the map
+  	std::unordered_set<std::string> uniqueSet;                          //a list that can only hold unique values (saves the word)
+  	std::map<int, std::pair<std::string, int>, std::greater<int> > occurance;                  //the map where we will save the sorted occurance in
+  	std::string buf = "";                                               //a buffer string that holds multiple char objects, that create a word (std::greater<int> is to put the highest value above)
+
+    for_each(tekst.begin(), tekst.end(), [&buf, &words](char c){ if(c==' '||c=='\0'){ words.push_back(buf); buf = ""; }else{ buf+=c; } });      //makes from a vector of char's a new vector with words
+    for_each(words.begin(), words.end(), [&uniqueSet](std::string s){ uniqueSet.insert(s); });                                                  //puts every word in a uniqueSet (automatically removes duplicates)
+
+    std::cout << std::endl;
+
+    for_each(uniqueSet.begin(), uniqueSet.end(), [&words, &bufferVec](std::string s){ int count = std::count(words.begin(), words.end(), s); bufferVec.push_back(std::make_pair(count, s)); });   //puts the unordered occurance in a buffer vector
+
+    std::sort(bufferVec.begin(), bufferVec.end());      //sorts the buffer vector
+
+    int tmp = 0;    //a temporarly int value to count through the vector
+    for_each(bufferVec.begin(), bufferVec.end(), [&occurance, &tmp](std::pair<int, std::string> vec){occurance.insert(std::make_pair(tmp, std::make_pair(vec.second, vec.first))); tmp++; });     //puts the now ordered vector values in to the map
+
+    for(int i = occurance.size()-1; i >= ((int)occurance.size() - 10); i--){                //couts the 10 biggest values in the map
+	  auto theMap = occurance[i];
+	  std::cout << theMap.first << ", " << theMap.second << '\n';
+    } 
+
 	
 }

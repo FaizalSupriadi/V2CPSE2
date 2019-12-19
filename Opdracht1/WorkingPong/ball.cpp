@@ -33,24 +33,24 @@ bool ball::intersect(const sf::FloatRect& other)const{
 }
 
 sf::Vector2f ball::collision(const sf::FloatRect& object){
-	//std::cout << object.left << " : " << object.top << " : " << object.width  << " : " << object.height << " : "<<(object.top - position.y)<<" --- " << position.x << " : " << position.y ;
+	std::cout << object.left << " : " << object.top << " : " << object.width  << " : " << object.height << " : "<<(object.top - position.y)<<" --- " << position.x << " : " << position.y ;
 	
 	if( (object.left - position.x) <= 60 && (object.left - position.x) >= 50){
    		std::cout << "left" << std::endl;
    		position.x -= 10;
    		return sf::Vector2f{ speed.x * -1, speed.y };
    	}
-   	if( (object.left - position.x) >= -20 && (object.left - position.x) <= 0){
+   	else if( (object.left - position.x) >= -20 && (object.left - position.x) <= 0){
    		std::cout << "right" << std::endl;
    		position.x += 10;
    		return sf::Vector2f{ speed.x * -1, speed.y };
    	}
-   	if( (object.top - position.y) <=60 && (object.top - position.y) >= 50 ){
+   	else if( (object.top - position.y) <=60 && (object.top - position.y) >= 50 ){
    		std::cout << "up" << std::endl;
    		position.y -= 10;
    		return sf::Vector2f{ speed.x, speed.y * -1 };
    	}
-   	if( (object.top - position.y) <= 0 ){
+   	else if( (object.top - position.y) <= 0 ){
    		std::cout << "bottom" << std::endl;
    		position.y += 10;
    		return sf::Vector2f{ speed.x, speed.y * -1 };
