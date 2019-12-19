@@ -64,10 +64,10 @@ int main(){
 
     int tmp = 0;    //a temporarly int value to count through the vector
     for_each(bufferVec.begin(), bufferVec.end(), [&occurance, &tmp](std::pair<int, std::string> vec){occurance.insert(std::make_pair(tmp, std::make_pair(vec.second, vec.first))); tmp++; });     //puts the now ordered vector values in to the map
-
+	std::cout << "opdr8\n";
     for(int i = occurance.size()-1; i >= ((int)occurance.size() - 10); i--){                //couts the 10 biggest values in the map
 	  auto theMap = occurance[i];
-	  std::cout << theMap.first << ", " << theMap.second << '\n';
+	  std::cout << theMap.first << " : " << theMap.second << '\n';
     } 
 
 	
