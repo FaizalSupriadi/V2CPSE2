@@ -1,6 +1,17 @@
-#include <iostream>
+/*#include <iostream>
 #include <fstream>
 #include <functional>
+#include <sstream>*/
+
+#include <iostream>
+#include <functional>
+#include <array>
+#include <fstream>
+#include <string>
+#include <exception>
+#include <memory>
+#include <vector>
+#include <sstream>
 #include <SFML/Graphics.hpp>
 #include "ball.hpp"
 #include "wall.hpp"
@@ -23,15 +34,19 @@ int main( int argc, char *argv[] ){
 
 	std::vector<drawable *> object;
 	
+	
+	
 	{
 		std::cout<<"reading\n";
 		std::ifstream input( "objects.txt" );
-		try{
-			for(;;){
-				object.push_back(read( input ));
+		std::string s;
+    	while(std::getline(input, s)){
+			try{
+				std::istringstream iss(s);
+				object.push_back(read( iss ));
+			}catch( std::exception & e ){
+				std::cout << e.what();
 			}
-		}catch( std::exception & problem ){
-			std::cout << problem.what();
 		}
 	}
 	

@@ -3,9 +3,15 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <functional>
 #include <array>
+#include <fstream>
 #include <string>
 #include <exception>
+#include <memory>
+#include <vector>
+#include <sstream>
+
 
 class unknown_color : public std::exception {
 private:
@@ -14,7 +20,7 @@ public:
    unknown_color( const std::string & name  ):
        s{ std::string{ "unknown color [" } + name + "]" }
    {}
-   virtual const char * what() const throw(){
+   const char * what() const noexcept {
       return s.c_str();
    }
 };
@@ -23,22 +29,23 @@ class end_of_file : public std::exception {
 public:
 	end_of_file( ){}
 
-	virtual const char * what() const throw(){
+	 const char * what() const noexcept {
       return "end of file";
    }
 };
 
 class invalid_position : public std::exception {
-private:
-	char s;
 public:
-	invalid_position(char name):
-		s( name )
+	invalid_position( const char & c, const char & a):
+		s{ std::string{ "missing a [\'" } + c + "\'] instead got a [\'" + a + "\'] "}
 	{}
 
-	virtual const char * what() const throw(){
-      return "unknown pos";
+	const char * what() const noexcept {
+      return s.c_str();
    }
+
+private:
+	std::string s;
 };
 
 class unknown_shape : public std::exception {
@@ -49,7 +56,7 @@ public:
 		s{ std::string{ "unknown shape [" } + s + "]" }
 	{}
 
-	const char * what() const noexcept {
+	const char * what() const noexcept  {
       return s.c_str();
    }
 
@@ -81,20 +88,21 @@ std::istream & operator>>( std::istream & input, sf::Color & rhs ){
 std::istream & operator>>( std::istream & input, sf::Vector2f & rhs ){
 	char c;
 	if( ! ( input >> c )){ throw end_of_file(); }
-	if( c != '(' ){ throw invalid_position( c ); }
+	if( c != '(' ){ throw invalid_position('(', c ); }
 
-	if( ! ( input >> rhs.x )){ }
+	if( ! ( input >> rhs.x )){ throw invalid_position(rhs.x, c );}
 
-	if( ! ( input >> c )){ }
-	if( ! ( input >> rhs.y )){ }
+	if( ! ( input >> c )){ throw invalid_position(c, c );}
+	 if(c != ',' ){ throw invalid_position( ',', c ); }
+	if( ! ( input >> rhs.y )){throw invalid_position( rhs.y,c ); }
 
-	if( ! ( input >> c )){ }
-	if( c != ')' ){ throw invalid_position( c ); }
+	if( ! ( input >> c )){ throw invalid_position(c, c );}
+	if( c != ')' ){ throw invalid_position( ')',c ); }
 
 	return input;
 }	
 
-drawable* read( std::ifstream & input){
+drawable* read( std::istream & input){
 	sf::Vector2f position,size;
 	sf::Color color;
 	int rotation;
@@ -120,7 +128,7 @@ drawable* read( std::ifstream & input){
       	throw end_of_file();
 	}
 
-   throw unknown_shape( name );
+   	throw unknown_shape( name );
 }
 /*
 	Standard
