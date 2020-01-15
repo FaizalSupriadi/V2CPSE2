@@ -16,7 +16,6 @@ int main( int argc, char *argv[] ){
 	pad pad1{ sf::Vector2f{ 540.0, 200.0  } };
 	pad pad2{ sf::Vector2f{ 100.0, 200.0  } };
 	
-	
 	walls.add( new wall{  sf::Vector2f{ 0.0, 0.0 },  sf::Vector2f{ 640.0, 10.0} } ); //top
 	walls.add( new wall{  sf::Vector2f{ 0.0, 0.0 },  sf::Vector2f{ 10.0, 480.0} } ); // left
 	walls.add( new wall{  sf::Vector2f{ 630.0, 0.0 },  sf::Vector2f{ 640.0, 480.0} } ); // right
@@ -33,8 +32,8 @@ int main( int argc, char *argv[] ){
 		
 		action( sf::Mouse::Left,     	[&](){ pad1.jump( sf::Mouse::getPosition( window )); }),
 		action( [&](){ my_ball.update();}),
-		action( [&](){ return my_ball.intersect(pad1.getGlobalBounds());}, [&](){ my_ball.setSpeed(my_ball.collision(pad1.getGlobalBounds())); }),
-		action( [&](){ return my_ball.intersect(pad2.getGlobalBounds());}, [&](){ my_ball.setSpeed(my_ball.collision(pad2.getGlobalBounds())); }),
+		action( [&](){ return my_ball.intersect(pad1.getGlobalBounds());}, [&](){ my_ball.collision(pad1.getGlobalBounds()); }),
+		action( [&](){ return my_ball.intersect(pad2.getGlobalBounds());}, [&](){ my_ball.collision(pad2.getGlobalBounds()); }),
 
 
 	};
@@ -48,7 +47,7 @@ int main( int argc, char *argv[] ){
 		for( auto p : walls ){
 			p->draw(window);
 			if( my_ball.intersect( p->getGlobalBounds() )){
-				my_ball.setSpeed(my_ball.collision(p->getGlobalBounds()));
+				my_ball.collision(p->getGlobalBounds());
 			}
 		}
 		my_ball.draw( window );

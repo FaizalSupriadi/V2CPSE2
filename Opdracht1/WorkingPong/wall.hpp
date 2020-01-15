@@ -39,6 +39,7 @@ public:
 };
 
 class pad : public drawable {
+private:
 	sf::RectangleShape rectangle;
 	sf::Vector2f position;
 	sf::Vector2f size;

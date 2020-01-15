@@ -11,10 +11,11 @@ private:
 	sf::Vector2f position;
 	sf::Vector2f speed;
 	float size;
+	sf::Vector2f location;	
 
 public:
 	
-	ball( sf::Vector2f position, sf::Vector2f speed = sf::Vector2f(+0.0 , +0.0 ),float size = 30.0 );
+	ball( sf::Vector2f position, sf::Vector2f speed = sf::Vector2f(-1.0 , 1.0 ),float size = 30.0 );
 
 	void draw( sf::RenderWindow & window );
 	
@@ -27,7 +28,7 @@ public:
 	bool intersect( const sf::FloatRect& other)const;
 	
 	sf::FloatRect getBounds();
-	sf::Vector2f collision( const sf::FloatRect& other);
+	void collision( const sf::FloatRect& other);
 
 
 };
