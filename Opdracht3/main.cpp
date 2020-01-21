@@ -26,16 +26,7 @@ int main( int argc, char *argv[] ){
 
 	sf::RenderWindow window{ sf::VideoMode{ 640, 480 }, "SFML window" };
 
-	pad pad1{ 	sf::Vector2f{ 310.0, 230.0 }, sf::Vector2f{ 20.0, 20.0 }};
-
-	std::array< drawable *, 1 > objects = { &pad1 };
-
-
-
-	std::vector<drawable *> object;
-	
-	
-	
+	std::vector<drawable *> object;	
 	{
 		std::cout<<"reading\n";
 		std::ifstream input( "objects.txt" );
@@ -45,16 +36,12 @@ int main( int argc, char *argv[] ){
 				std::istringstream iss(s);
 				object.push_back(read( iss ));
 			}catch( std::exception & e ){
-				std::cout << e.what();
+				std::cout<< "The problem: " << e.what() << "\n";
 			}
 		}
 	}
 	
 	action actions[] = {
-		action( sf::Keyboard::Left,  	[&](){ pad1.move( sf::Vector2f( -3.0,  0.0 )); }),
-		action( sf::Keyboard::Right, 	[&](){ pad1.move( sf::Vector2f( +3.0,  0.0 )); }),
-		action( sf::Keyboard::Up,    	[&](){ pad1.move( sf::Vector2f(  0.0, -3.0 )); }),
-		action( sf::Keyboard::Down,  	[&](){ pad1.move( sf::Vector2f(  0.0, +3.0 )); }),
 		action( sf::Mouse::Left, 		[&](){ for( auto & p : object ){ if( p->contains(window.mapPixelToCoords(sf::Mouse::getPosition( window )))){ if( !p->getHold()){ p->setHold(1);}}}}),
 		action( sf::Mouse::Right, 		[&](){ for( auto & p : object ){ if( p->getHold()){ std::cout<<"release\n"; p->setHold(0); }} }),
 		action( [&](){ for( auto & p : object ){ if( p->getHold()){ std::cout<<"jump\n";p->jump(sf::Mouse::getPosition( window )); write(p->getId(),p->getPosition());}}}),										
@@ -67,10 +54,6 @@ int main( int argc, char *argv[] ){
 
 		window.clear();
 
-		for( auto & p : objects ){
-        	p->draw( window );
-      	}
-		
 		for( auto & p : object ){
         	p->draw( window );
 		}
@@ -84,8 +67,9 @@ int main( int argc, char *argv[] ){
 	    while( window.pollEvent(event) ){
 			if( event.type == sf::Event::Closed ){
 				window.close();
-			}
-		}	
+			}	
+
+	  }
 	}
 
 	std::cout << "Terminating application\n";

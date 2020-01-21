@@ -18,6 +18,7 @@ public:
 	virtual void setId( int id);
 	virtual int getId();
 	virtual std::string getPosition();
+
 };
 
 #endif

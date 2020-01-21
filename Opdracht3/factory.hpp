@@ -12,6 +12,18 @@
 #include <vector>
 #include <sstream>
 
+class invalid_axis : public std::exception {
+private:
+	std::string s;
+public:
+  invalid_axis( const char & c):
+    s{ std::string{ "missing " } + c + "-axis " } 
+  {}
+
+  const char * what() const noexcept {
+      return s.c_str();
+   }
+};
 
 class unknown_color : public std::exception {
 private:
@@ -88,15 +100,19 @@ std::istream & operator>>( std::istream & input, sf::Color & rhs ){
 std::istream & operator>>( std::istream & input, sf::Vector2f & rhs ){
 	char c;
 	if( ! ( input >> c )){ throw end_of_file(); }
+	
 	if( c != '(' ){ throw invalid_position('(', c ); }
 
-	if( ! ( input >> rhs.x )){ throw invalid_position(rhs.x, c );}
+	if( ! ( input >> rhs.x )){ throw invalid_axis( 'x' ); }
 
 	if( ! ( input >> c )){ throw invalid_position(c, c );}
-	 if(c != ',' ){ throw invalid_position( ',', c ); }
-	if( ! ( input >> rhs.y )){throw invalid_position( rhs.y,c ); }
+	
+	if(c != ',' ){ throw invalid_position( ',', c ); }
+
+	if( ! ( input >> rhs.y )){ throw invalid_axis( 'y' ); }
 
 	if( ! ( input >> c )){ throw invalid_position(c, c );}
+
 	if( c != ')' ){ throw invalid_position( ')',c ); }
 
 	return input;
@@ -147,7 +163,7 @@ void write(int id, std::string position ){
 		
 		if(c.find(".png") == std::string::npos){ input >> d; }else{d = "";}
 		
-		std::cout <<identity << " : "<< id<<"\n";
+		//std::cout <<identity << " : "<< id<<"\n";
 		
 		if( identity == std::to_string(id) ){
 			std::cout<<"verified\n";

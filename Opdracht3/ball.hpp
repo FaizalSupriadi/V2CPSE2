@@ -41,7 +41,6 @@ public:
 	sf::FloatRect getBounds();
 	sf::Vector2f collision( const sf::FloatRect& other);
 
-
 };
 
 #endif

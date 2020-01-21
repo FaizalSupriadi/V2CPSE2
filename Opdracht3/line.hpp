@@ -33,6 +33,7 @@ public:
 	virtual void setId( int id)override;
 	virtual int getId()override;
 	virtual std::string getPosition()override;
+
 };
 
 #endif
