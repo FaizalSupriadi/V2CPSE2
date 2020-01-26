@@ -12,6 +12,20 @@
 #include <vector>
 #include <sstream>
 
+class invalid_id : public std::exception {
+private:
+	std::string s;
+public:
+  invalid_id( const char & c):
+    s{ std::string{ "Wrong id type: " } + c  } 
+  {}
+
+  const char * what() const noexcept {
+      return s.c_str();
+   }
+
+};
+
 class invalid_axis : public std::exception {
 private:
 	std::string s;
@@ -96,6 +110,20 @@ std::istream & operator>>( std::istream & input, sf::Color & rhs ){
 		throw unknown_color( s );
 }
 
+long string_to_long(const std::string & s){
+	float f = std::stof(s);
+	return long(f);
+}
+
+bool is_integer(const std::string & s){
+	float f;
+	float r;
+	f = std::stof(s);
+	r = f - long(f);
+
+	return r == 0;
+}
+
 
 std::istream & operator>>( std::istream & input, sf::Vector2f & rhs ){
 	char c;
@@ -122,24 +150,30 @@ drawable* read( std::istream & input){
 	sf::Vector2f position,size;
 	sf::Color color;
 	int rotation;
-	int id;
-	std::string name,sizef, pic;
+	std::string name,sizef, pic,id;
+	long x;
 
 	
 	input >> id >> position >> name;
 	std::cout<< id<<" : " << name <<"\n";
+	try{
+		if(is_integer(id)){
+			x = string_to_long(id);
+		}
+	}catch(...){ char tmp = id[0];throw invalid_id(tmp); }
+	int idInt = std::stoi(id);
 	if( name == "CIRCLE" ){
 		input >> color >> sizef;
-	return new ball( position, std::stof(sizef), color, id);
+	return new ball( position, std::stof(sizef), color, idInt);
 	} else if( name == "RECTANGLE" ){
 		input >> color >> size;
-	return new wall( position, size, color, id );
+	return new wall( position, size, color, idInt );
    	} else if( name == "PICTURE" ){
    		input >> pic;
-    return new image( pic, position, id );
+    return new image( pic, position, idInt );
 	}else if( name == "LINE" ){
 		input >> color >> rotation;
-	return new line( position, rotation, color, id);
+	return new line( position, rotation, color, idInt);
 	}else if( name == "" ){
       	throw end_of_file();
 	}

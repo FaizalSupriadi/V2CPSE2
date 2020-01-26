@@ -3,18 +3,20 @@
 
 #include <string>
 #include "image.hpp"
-#include "drawable.hpp"
 
 class command{
 private:
-	drawable* img;
-	std::string pic,before;
-	bool curPic;
+	image* pic;
+	std::string picture;
+	std::string pictureBefore = "";
+
 public:
-	command(drawable* img);
-	
-	bool execute( bool curPic);
-	
-	void back();
+	command( image* pic, std::string picture );
+
+	void execute();
+
+	void undo();
+
 };
+
 #endif

@@ -6,23 +6,27 @@
 #include "drawable.hpp"
 #include "action.hpp"
 #include "command.hpp"
-#include "gameLogic.hpp"
+#include "gameSetup.hpp"
 
 int main( int argc, char *argv[] ){
-	std::cout << "Starting application 01-05 array of actions\n";
-
 	sf::RenderWindow window{ sf::VideoMode{ 640, 480 }, "SFML window" };
 	
-	auto roster = image( "roster.png", sf::Vector2f{30,70}, sf::Vector2f{0.5,0.5} );
-	auto undo = image( "undo.png", sf::Vector2f{470,200}, sf::Vector2f{0.2,0.2} );
-	std::vector< drawable * > object;	
-	std::vector<command* > steps;
-	makeBoard(object);
-	bool butterEgg=1;
-	action actions[] = {
-		action( sf::Mouse::Left, 		[&](){ for( auto & p : object ){ if( p->contains(window.mapPixelToCoords(sf::Mouse::getPosition( window )))&&p->getSpriteInt()){steps.push_back(new command(p));butterEgg = steps.back()->execute(butterEgg);}}}),
-		action( sf::Mouse::Left, 		[&](){ if( undo.contains(window.mapPixelToCoords(sf::Mouse::getPosition( window )))&&steps.size()>0){ steps.back()->back();steps.pop_back();butterEgg = !butterEgg;}}),
-	};	
+	auto roster = image( "roster.png", sf::Vector2f{30,50}, sf::Vector2f{0.6,0.6} );
+	auto undoPic = image( "undo.png", sf::Vector2f{470,200}, sf::Vector2f{0.1,0.1} );
+	std::array< image *,9 > objects;	
+	std::vector<command* > undoList;
+	makeBoard(objects);
+	bool butterEgg=1; // decides whether the butter or egg needs to be drawn
+
+action actions[] = {
+		// Undo
+      action( sf::Mouse::Left,  [&](){ if(undoPic.contains(window.mapPixelToCoords(sf::Mouse::getPosition( window )))  && undoList.size() > 0){ 
+          undoList.back()->undo(); undoList.pop_back();  if(butterEgg){butterEgg = 0;}else{butterEgg = 1;}} }),
+      // Add to undo list
+      action( sf::Mouse::Left,  [&](){ for(auto & p : objects){ if(p->contains( window.mapPixelToCoords(sf::Mouse::getPosition( window )))&& p->getSprite() == "black.png"){ 
+          if(butterEgg){ undoList.push_back(new command(p, "egg.png")); butterEgg = 0; }else{ undoList.push_back(new command(p, "butter.png")); butterEgg = 1; } undoList.back()->execute(); } } }),
+  };
+		
 	while (window.isOpen()) {
 		for( auto & action : actions ){
 			action();
@@ -30,21 +34,22 @@ int main( int argc, char *argv[] ){
 
 		window.clear();
 		roster.draw(window);
-		undo.draw(window);
-		for( auto & p : object ){
+		undoPic.draw(window);
+		for( auto & p : objects ){
         	p->draw( window );
       	}
-		if(gameState(object)){        
-			steps.clear(); 
-			object.clear();
-			makeBoard(object);                 
-			butterEgg = 0;                        
-			                       
-      }
+		
 
 		window.display();
 
-		sf::sleep( sf::milliseconds( 10 ));
+		if(gameCheck(objects)){        
+			makeBoard(objects);               
+       		butterEgg = 0;
+        	undoList.clear();                                             
+			                       
+      	}
+
+		//sf::sleep( sf::milliseconds( 10 ));
 
         sf::Event event;		
 	    while( window.pollEvent(event) ){

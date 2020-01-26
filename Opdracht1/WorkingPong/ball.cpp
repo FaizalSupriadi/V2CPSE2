@@ -37,7 +37,7 @@ bool ball::intersect(const sf::FloatRect& other)const{
 }
 
 void ball::collision(const sf::FloatRect& object){
-	std::cout << object.left << " : " << object.top << " : " << object.width  << " : " << object.height << " : "<< location.x << " : " << location.y <<"\n"; ;
+	//std::cout << object.left << " : " << object.top << " : " << object.width  << " : " << object.height << " : "<< location.x << " : " << location.y <<"\n"; ;
 	
 	if(object.left + object.width == location.x + 2 ){
          position += sf::Vector2f{2, 0};

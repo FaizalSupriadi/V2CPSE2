@@ -1,14 +1,13 @@
 #include <SFML/Graphics.hpp>
-#include <iostream>
+#include <string>
 #include "image.hpp"
-#include "drawable.hpp"
 
-image::image( std::string picture, sf::Vector2f position, sf::Vector2f size, int objNum ):
+image::image( std::string picture, sf::Vector2f position,sf::Vector2f size ):
 	picture{ picture },
 	position{ position },
-	size{size},
-	objNum{objNum}
-{}
+	size{size}
+{sprite.setScale(size);}
+
 void image::draw( sf::RenderWindow & window ) {
 	texture.loadFromFile(picture);
 	sprite.setTexture(texture);
@@ -17,43 +16,14 @@ void image::draw( sf::RenderWindow & window ) {
 	window.draw(sprite);
 }
 
-bool image::contains(const sf::Vector2f& other)const{
-	//std::cout << circle.getGlobalBounds().intersects( other) <<"\n";
-	return sprite.getGlobalBounds().contains( other);
-	
-}
-
-bool image::setSprite( bool x ){
-	if(x && picture != "egg.png" && picture != "butter.png"){
-		picture = "egg.png" ;
-		objNum = 2;
-		return false;
-	}else if(!x && picture != "egg.png"  && picture != "butter.png"){
-		picture = "butter.png";
-		objNum = 3;
-		return true;
-	}else{
-		return x;
-	}
+bool image::contains( const sf::Vector2f& object ) const {
+	return sprite.getGlobalBounds().contains( object );
 }
 
 void image::setSprite( std::string newSprite ){
-	picture = newSprite;
-	if(picture == "egg.png"){
-		objNum = 2;
-	}else if(picture == "butter.png"){
-		objNum = 3;
-	}else{
-		objNum = 1;
-	}
+ 	picture = newSprite;
 }
 
 std::string image::getSprite(){
 	return picture;
 }
-
-int image::getSpriteInt(){
-	return objNum;
-}
-
-

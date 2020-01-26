@@ -9,10 +9,10 @@
 #############################################################################
 
 # source files in this project (main.cpp is automatically assumed)
-SOURCES := image.cpp command.cpp
+SOURCES := command.cpp
 
 # header files in this project
-HEADERS := drawable.hpp action.hpp image.hpp gameSetup.hpp command.hpp
+HEADERS := action.hpp command.hpp gridObjects.hpp gameSetup.hpp
 
 # other places to look for files for this project
 SEARCH  := 

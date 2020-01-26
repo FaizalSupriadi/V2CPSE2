@@ -1,20 +1,18 @@
-
 #include <string>
 #include "command.hpp"
 #include "image.hpp"
 
-command::command(drawable*img):
-	img{ img }
-{
-	pic= img->getSprite();
+command::command(image* pic, std::string picture):
+	pic{ pic },
+	picture{ picture }
+{}
+
+void command::execute(){
+	pictureBefore = pic->getSprite();
+
+	pic->setSprite( picture );
 }
 
-bool command::execute( bool curPic ){
-	before = img->getSprite();
-
-	return img->setSprite( curPic );
-}
-
-void command::back(){
-	img->setSprite( before );
+void command::undo(){
+	pic->setSprite( pictureBefore );
 }

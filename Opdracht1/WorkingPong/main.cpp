@@ -24,11 +24,11 @@ int main( int argc, char *argv[] ){
 
 	action actions[] = {
 		
-		action( sf::Keyboard::Up,    	[&](){ pad1.move( sf::Vector2f(  0.0, -8.0)); }),
-		action( sf::Keyboard::Down,  	[&](){ pad1.move( sf::Vector2f(  0.0, +8.0 )); }),
+		action( sf::Keyboard::Up,    	[&](){ pad1.move( sf::Vector2f(  0.0, -2.0)); }),
+		action( sf::Keyboard::Down,  	[&](){ pad1.move( sf::Vector2f(  0.0, +2.0 )); }),
 		
-		action( sf::Keyboard::W,    	[&](){ pad2.move( sf::Vector2f(  0.0, -8.0 )); }),
-		action( sf::Keyboard::S,  		[&](){ pad2.move( sf::Vector2f(  0.0, +8.0 )); }),
+		action( sf::Keyboard::W,    	[&](){ pad2.move( sf::Vector2f(  0.0, -2.0 )); }),
+		action( sf::Keyboard::S,  		[&](){ pad2.move( sf::Vector2f(  0.0, +2.0 )); }),
 		
 		action( sf::Mouse::Left,     	[&](){ pad1.jump( sf::Mouse::getPosition( window )); }),
 		action( [&](){ my_ball.update();}),
@@ -55,7 +55,7 @@ int main( int argc, char *argv[] ){
 		pad2.draw( window );
 		window.display();
 
-		sf::sleep( sf::milliseconds( 10 ));
+		sf::sleep( sf::milliseconds( 1 ));
 
         sf::Event event;		
 	    while( window.pollEvent(event) ){
